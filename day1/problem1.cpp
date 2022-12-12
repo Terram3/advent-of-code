@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <algorithm>
 #include <vector>
 
 using namespace std;
@@ -29,13 +30,19 @@ int main(){
         }
     }
 
+    vector<int> topElves;
     int result = 0;
-    for(int j = 0; j < i; j++){
+    for(int j = 0; j <= i; j++){
         int temp = sumOfVector(map[j]);
         if(temp > result){
             result = temp;
         }
+        topElves.push_back(temp);
     }
 
+    sort(topElves.begin(), topElves.end());
+
     cout << result << endl;
+
+    cout << topElves[i] + topElves[i-1] + topElves[i-2] << endl;
 }
