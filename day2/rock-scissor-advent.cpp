@@ -63,7 +63,6 @@ int main(){
         auto a = line.find(space);
         string fToken = line.substr(0, a);
         line.erase(0, a + space.length());
-        cout << fToken << line << endl;
         sum += compareLogic(fToken, line);
     }
     cout << sum << endl;
