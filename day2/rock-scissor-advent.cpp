@@ -4,45 +4,53 @@
 
 using namespace std;
 
+enum choice {X = 1, Y = 2, Z = 3};
+
 int compareLogic(string fToken, string sToken){
-    int a, b, res;
-    if(fToken == "A"){
-        a = 1;
-    } else if(fToken == "B") {
-        a = 2;
+    int a;
+    char c2 = sToken[0];
+    if(c2 == 'X'){
+        a = X;
+    } else if(c2 == 'Y') {
+        a = Y;
     } else {
-        a = 3;
+        a = Z;
     } 
 
-    switch (a)
-    {
-    case 1:
-        if(sToken == "X"){
-            res = a + 3;
-        } else if(sToken == "Y"){
-            res = a;
-        } else {
-            res = a + 6;
+    int res = 0;
+
+    char c = fToken[0];
+    switch (a){
+        case X: {
+            if(c == 'A'){
+                res = X + 3;
+            } else if(c == 'B'){
+                res = X;
+            } else {
+                res = X + 6;
+            }
+            break;
         }
-        break;
-    case 2:
-        if(sToken == "X"){
-            res = a + 6;
-        } else if(sToken == "Y"){
-            res = a + 3;
-        } else {
-            res = a;
+        case Y: {
+            if(c == 'A'){
+                res = Y + 6;
+            } else if(c == 'B'){
+                res = Y + 3;
+            } else {
+                res = Y;
+            }
+            break;
         }
-        break;
-    case 3:
-        if(sToken == "X"){
-            res = a;
-        } else if(sToken == "Y"){
-            res = a + 6;
-        } else {
-            res = a + 3;
+        case Z: {
+            if(c == 'A'){
+                res = Z;
+            } else if(c == 'B'){
+                res = Z + 6;
+            } else {
+                res = Z + 3;
+            }
+            break;
         }
-        break;
     }
     return res;
 }
@@ -55,7 +63,7 @@ int main(){
         auto a = line.find(space);
         string fToken = line.substr(0, a);
         line.erase(0, a + space.length());
-        cout << fToken << "    " << line << endl;
+        cout << fToken << line << endl;
         sum += compareLogic(fToken, line);
     }
     cout << sum << endl;
