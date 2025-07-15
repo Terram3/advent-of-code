@@ -1,8 +1,21 @@
 import regex as re
 
-def moveElements(dictionary:dict[int, list[str]], nbrElements:int, fromArr:int, toArr:int) -> None:
+def moveElementsC2(dictionary:dict[int, list[str]], nbrElements:int, fromArr:int, toArr:int) -> None:
     fromArrM1 = dictionary[fromArr]
     save: list[str] = fromArrM1[-nbrElements:]
+    toArrM2 = dictionary[toArr]
+    toArrM2.extend(save)
+    del fromArrM1[-nbrElements:]
+    print(f"Current iteration From array: {fromArrM1}")
+    print(f"Current iteration to array: {toArrM2}")
+
+    dictionary[fromArr] = fromArrM1
+    dictionary[toArr] = toArrM2
+
+def moveElementsC1(dictionary:dict[int, list[str]], nbrElements:int, fromArr:int, toArr:int) -> None:
+    fromArrM1 = dictionary[fromArr]
+    save: list[str] = fromArrM1[-nbrElements:]
+    save[::-1]
     toArrM2 = dictionary[toArr]
     toArrM2.extend(save)
     del fromArrM1[-nbrElements:]
@@ -35,7 +48,7 @@ def main():
             elif "move" in line:
                 moves:list[str] = re.findall(r"\p{N}+", line)
                 print(moves)
-                moveElements(dictionary=d, nbrElements=int(moves[0]), fromArr=int(moves[1]), toArr=int(moves[2]))
+                moveElementsC1(dictionary=d, nbrElements=int(moves[0]), fromArr=int(moves[1]), toArr=int(moves[2]))
         res = ""
         print(sizeEnd)
         for i in range(sizeEnd):
