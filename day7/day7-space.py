@@ -41,10 +41,7 @@ def main():
                         d[temp] = 0
             if line[0].isnumeric():
                 arr:list[str] = line.split(" ")
-                if temp not in d:
-                    d[temp] = int(arr[0])
-                else:
-                    d[temp] = d[temp] + int(arr[0])
+                d[temp] += int(arr[0])
         solve(limit=100000, d=d)
 if __name__ == "__main__":
     main()
