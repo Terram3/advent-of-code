@@ -154,6 +154,14 @@ int solve2(int** matrix, int size){
     return result;
 }
 
+int freeMat(int** matrix, int iTop){
+    for(int i = 0; i < iTop; i++){
+        free(matrix[i]);
+    }
+    free(matrix);
+    return 1;
+}
+
 int main(){
     std::string read;
     int** matrix;
@@ -167,6 +175,6 @@ int main(){
         i++;
         saveLine(read, matrix, i, size);
     }
-    printMat(matrix, size, size);
     solve2(matrix, size);
+    freeMat(matrix, size);
 }
