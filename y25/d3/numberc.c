@@ -19,7 +19,7 @@ long countLine(const char* line) {
             max = (line[i]) - '0';
         }
     }
-    printf("Line: %s, Res: %d + %d = %d\n", line, res, max, res+max);
+    printf("Line: %s, Res: %ld + %ld = %ld\n", line, res, max, res+max);
     return res+max;
 }
 
