@@ -35,11 +35,7 @@ long countLinep2(const char* line) {
                 fromIndex = ii + 1;
             }
         }
-        if(res == 0){
-            res = max;
-        } else {
-            res = res*10 + max;
-        }
+        res = res==0 ? max : res*10 + max;
         max = 0;
         fromEnd--;
     }
@@ -51,6 +47,10 @@ int main() {
     char str[110];
     long result = 0;
     while (fgets(str, sizeof(str), stdin) != NULL){
+        if(str[0] == '\n'){
+            //for debug break
+            break;
+        }
         str[strcspn(str, "\n")] = 0;  // Remove newline character
         result += countLinep2(str);
     }
