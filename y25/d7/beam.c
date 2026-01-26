@@ -15,7 +15,7 @@ int beamCutting(char line[4096][1024], int len){
                 pointRow[ii] = 0;
                 pointRow[ii-1] = 1;
                 pointRow[ii+1] = 1;
-            } 
+            }
         }
     }
     return res;
@@ -27,7 +27,7 @@ unsigned long beamCuttingp2(char line[4096][1024], int len){
     for (int i = 0; i < strlen(line[0]); i++){
         if(line[0][i]=='S'){
             pointRow[i] = 1;
-        } 
+        }
     }
 
     for(int i = 0; i < len; i++){
