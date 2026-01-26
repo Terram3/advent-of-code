@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 int beamCutting(char line[4096][1024], int len){
     int pointRow[1024];
     int res = 0;
@@ -22,7 +20,6 @@ int beamCutting(char line[4096][1024], int len){
     }
     return res;
 }
-
 
 unsigned long beamCuttingp2(char line[4096][1024], int len){
     unsigned long pointRow[1024];
@@ -48,7 +45,6 @@ unsigned long beamCuttingp2(char line[4096][1024], int len){
     }
     return res;
 }
-
 
 int main(){
     char line[4096][1024];
