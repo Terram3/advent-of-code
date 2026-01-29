@@ -16,22 +16,20 @@ typedef struct min_distance {
 } min_distance;
 
 typedef struct connected_groups {
-    int indexes[1000];
+    int indexes[1500];
     int value;
 } connected_groups;
 
 unsigned long pow2(int base){
-    int result = 1;
-    for(int i = 0; i < 2; i++){
-        result *= base;
-    }
-    return result;
+    return base*base;
 }
 
 int cmp(const void *a, const void *b){
     min_distance *min_dist1 = (min_distance *)a;
     min_distance *min_dist2 = (min_distance *)b;
-    return (min_dist1->min - min_dist2->min);
+    if (min_dist1->min < min_dist2->min) return -1;
+    if (min_dist1->min > min_dist2->min) return 1;
+    return 0;
 }
 
 int cmp2(const void *a, const void *b){
@@ -46,13 +44,15 @@ int mergeIds(connected_groups *circuits, int length, min_distance temp, int* cir
 
     connected_groups *circ1 = &circuits[id1];
     connected_groups *circ2 = &circuits[id2];
-    for(int i = 0; i < 1000; i++){
+    int itr = 0;
+    for(int i = 0; itr < circ2->value; i++){
         int idx = circ2->indexes[i];
         if (idx == -1) continue;
         int skip = circ1->value;
         circ1->indexes[skip] = idx;
         circuitId[idx] = id1;
         circ1->value++;
+        itr++;
     }
     memset(circ2->indexes, -1, sizeof(circ2->indexes));
     circ2->value = 0;
@@ -76,28 +76,32 @@ int indexCheck(connected_groups* circuits_cur, int length, min_distance temp, in
         circuitId[temp.min_index1] = newIdx;
         circuitId[temp.min_index2] = newIdx;
         circuits->value = 2;
+        return 1;
     } else if(id1 != -1 && id2 == -1) {
         connected_groups *circuits = &circuits_cur[id1];
         int pos = 0;
-        while (pos < 1000 && circuits->indexes[pos] != -1){
+        while (pos < 1500 && circuits->indexes[pos] != -1){
             pos++;
         }
         int newPoint = temp.min_index2;
         circuits->indexes[pos] = newPoint;
         circuits->value++;
         circuitId[newPoint] = id1;
+        return 1;
     } else if(id1 == -1 && id2 != -1){
         connected_groups *circuits = &circuits_cur[id2];
         int pos = 0;
-        while (pos < 1000 && circuits->indexes[pos] != -1){
+        while (pos < 1500 && circuits->indexes[pos] != -1){
             pos++;
         }
         int newPoint = temp.min_index1;
         circuits->indexes[pos] = newPoint;
         circuits->value++;
         circuitId[newPoint] = id2;
+        return 1;
     } else if(id1 != -1 && id2 != -1 && id1 != id2) {
         mergeIds(circuits_cur, length, temp, circuitId);
+        return 1;
     }
     return 0;
 }
@@ -123,7 +127,7 @@ long playgroundprob(cords cordinates[1024], int length){
     connected_groups *circuits = malloc(1000*sizeof(connected_groups));
     for(int i = 0; i < 1000; i++){
         connected_groups cir;
-        memset(cir.indexes, -1, sizeof(int) * 1000);
+        memset(cir.indexes, -1, sizeof(int) * 1500);
         cir.value = 0;
         circuits[i] = cir;
     }
@@ -132,9 +136,28 @@ long playgroundprob(cords cordinates[1024], int length){
     for (int i = 0; i < 1000; i++) {
         indexCheck(circuits, 1000, min_distances[i], circuitsId);
     }
+
+    for (int i = 0; i < length; i++) {
+        if (circuitsId[i] == -1) {
+            int newIdx = -1;
+            for (int ii = 0; ii < 1000; ii++) {
+                if (circuits[ii].value == 0) {
+                    newIdx = ii;
+                    break;
+                }
+            }
+            circuits[newIdx].indexes[0] = i;
+            circuits[newIdx].value = 1;
+            circuitsId[i] = newIdx;
+        }
+    }
+
     qsort(circuits, 1000, sizeof(connected_groups), cmp2);
     int sum = 1;
     for(int i = 0; i < 3; i++){
+        if(circuits[i].value == 0){
+            continue;
+        }
         printf("Data for group: %d\n", circuits[i].value);
         sum *= circuits[i].value;
     }
