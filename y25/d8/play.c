@@ -12,7 +12,7 @@ typedef struct cords {
 typedef struct min_distance {
     int min_index1;
     int min_index2;
-    unsigned long min;
+    double min;
 } min_distance;
 
 typedef struct connected_groups {
@@ -20,7 +20,7 @@ typedef struct connected_groups {
     int value;
 } connected_groups;
 
-int pow2(int base){
+unsigned long pow2(int base){
     int result = 1;
     for(int i = 0; i < 2; i++){
         result *= base;
@@ -46,23 +46,14 @@ int mergeIds(connected_groups *circuits, int length, min_distance temp, int* cir
 
     connected_groups *circ1 = &circuits[id1];
     connected_groups *circ2 = &circuits[id2];
-    int itr = 0;
     for(int i = 0; i < 1000; i++){
         int idx = circ2->indexes[i];
         if (idx == -1) continue;
-
-        int pos = 0;
-        while (pos < 1000 && circ1->indexes[pos] != -1)
-            pos++;
-
-        if (pos == 1000) {
-            return 0;
-        }
-
-        circ1->indexes[pos] = idx;
+        int skip = circ1->value;
+        circ1->indexes[skip] = idx;
         circuitId[idx] = id1;
+        circ1->value++;
     }
-    circ1->value = circ1->value + circ2->value;
     memset(circ2->indexes, -1, sizeof(circ2->indexes));
     circ2->value = 0;
     return 0;
@@ -88,18 +79,23 @@ int indexCheck(connected_groups* circuits_cur, int length, min_distance temp, in
     } else if(id1 != -1 && id2 == -1) {
         connected_groups *circuits = &circuits_cur[id1];
         int pos = 0;
-        while (pos < 1000 && circuits->indexes[pos] != -1) pos++;
+        while (pos < 1000 && circuits->indexes[pos] != -1){
+            pos++;
+        }
         int newPoint = temp.min_index2;
-        circuits->indexes[pos] = temp.min_index2;
+        circuits->indexes[pos] = newPoint;
         circuits->value++;
-        circuitId[temp.min_index2] = id1;
+        circuitId[newPoint] = id1;
     } else if(id1 == -1 && id2 != -1){
         connected_groups *circuits = &circuits_cur[id2];
         int pos = 0;
-        while (pos < 1000 && circuits->indexes[pos] != -1) pos++;
-        circuits->indexes[pos] = temp.min_index1;
+        while (pos < 1000 && circuits->indexes[pos] != -1){
+            pos++;
+        }
+        int newPoint = temp.min_index1;
+        circuits->indexes[pos] = newPoint;
         circuits->value++;
-        circuitId[temp.min_index1] = id2;
+        circuitId[newPoint] = id2;
     } else if(id1 != -1 && id2 != -1 && id1 != id2) {
         mergeIds(circuits_cur, length, temp, circuitId);
     }
@@ -112,7 +108,7 @@ long playgroundprob(cords cordinates[1024], int length){
     int itr = 0;
     for (int i = 0; i < length; i++) {
         for (int ii = i + 1; ii < length; ii++) {
-            unsigned long distance = sqrt(
+            double distance = sqrt(
                 pow2(cordinates[i].x - cordinates[ii].x) +
                 pow2(cordinates[i].y - cordinates[ii].y) +
                 pow2(cordinates[i].z - cordinates[ii].z)
