@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int countXmas(char line[150][2048], int x, int y, int xw, int yh){
+int countXmasp1(char line[150][2048], int x, int y, int xw, int yh){
     int res = 0;
     if(x-3 >= 0 && line[x-1][y] == 'M' && line[x-2][y] == 'A' && line[x-3][y] == 'S'){
         res++;
@@ -31,7 +31,7 @@ int countXmas(char line[150][2048], int x, int y, int xw, int yh){
     return res;
 }
 
-int countMas(char line[150][2048], int x, int y, int xw, int yh){
+int countMasp2(char line[150][2048], int x, int y, int xw, int yh){
     int res = 0;
     if(x-1 >= 0 && x+1 < xw && y-1 >= 0 && y+1 < yh
         && line[x-1][y-1] == 'M' && line[x+1][y+1] == 'S'
@@ -60,10 +60,10 @@ int xmasMat(char line[150][2048], int length){
     for(int i = 0; i < length; i++){
         for(int ii = 0; ii < size; ii++){
             if(line[i][ii] == 'X'){
-                count += countXmas(line, i, ii, size, length);
+                count += countXmasp1(line, i, ii, size, length);
             }
             if(line[i][ii] == 'A'){
-                count2 += countMas(line, i, ii, size, length);
+                count2 += countMasp2(line, i, ii, size, length);
             }
         }
     }
