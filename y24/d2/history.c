@@ -34,7 +34,6 @@ int main(){
     while(fgets(line, sizeof line, stdin) != NULL && line[0] != '\n'){
         int nums[100];
         int n = 0;
-
         chr = strtok(line, " \n");
         while(chr != NULL){
             if(sscanf(chr, "%d", &nums[n]) == 1){
