@@ -41,6 +41,42 @@ int solver(bool pairs[100][100], int numbers[200][30], int until){
     return result;
 }
 
+int solver2(bool pairs[100][100], int numbers[200][30], int until){
+    bool ok = false;
+    bool savedRow = false;
+    int rowLength;
+    int result = 0;
+    int ii = 0;
+    for (int i = 0; i < until; i++){
+        rowLength = 0;
+        ok = false;
+        savedRow = false;
+        ii = 0;
+        for (; ii < 30; ii++){
+            if(numbers[i][ii] == 0 && !savedRow){
+                savedRow = true;
+                rowLength=ii/2;
+            }
+            for(int iii = ii+1; iii < 30; iii++){
+                if (pairs[numbers[i][ii]][numbers[i][iii]]) {
+                    printf("Num 1: %d, Num 2: %d\n", numbers[i][ii], numbers[i][iii]);
+                    int temp = numbers[i][ii];
+                    numbers[i][ii] = numbers[i][iii];
+                    numbers[i][iii] = temp;
+                    ok = true;
+                    ii--;
+                    break;
+                }
+            }
+        }
+        if(ok){
+            printf("Row: %d, Col: %d, number: %d\n", i, rowLength,numbers[i][rowLength]);
+            result+=numbers[i][rowLength];
+        }
+    }
+    return result;
+}
+
 
 int main(){
     char line[1400][340];
@@ -77,6 +113,6 @@ int main(){
             }
         }
     }
-    printf("Result: %d\n", solver(pairs, numbers, row));
+    printf("Result: %d\n", solver2(pairs, numbers, row));
     return 0;
 }
